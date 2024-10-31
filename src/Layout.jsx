@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
 			{/* For all the other pages */}
 			<Box
 				flex={1}
-				w={"calc(100% - 250px)"}
+				w={{sm: "calc(100% - 250px)", base:"calc(100% - 10px)"}}
 				h={"100%"}
 				mt={"60px"}
 				mx={"auto"}

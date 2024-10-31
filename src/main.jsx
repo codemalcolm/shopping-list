@@ -17,6 +17,11 @@ const router = createBrowserRouter([
     // loader: rootLoader,
     children: [
       {
+        path: "/",
+        element: <App />,
+        // loader: teamLoader,
+      },
+      {
         path: "list-detail",
         element: <ShoppingListDetail />,
         // loader: teamLoader,

@@ -8,6 +8,7 @@ import {
 	Link,
 	Text,
 } from "@chakra-ui/react";
+import {Avatar} from "./components/ui/avatar"
 import React from "react";
 import HamburgerIcon from "./assets/icons/burger-icon.svg"
 // import ProfileIcon from "../icons/profile-icon.svg";
@@ -29,16 +30,7 @@ const Navbar = () => {
 					alignItems={"center"}
 					height={"32px"}
 				>
-
-					<Box
-						p={"8px"}
-						borderRadius={"full"}
-						border={"1px solid black"}
-						bgColor={"gray.300"}
-            ml={"150px"}
-					>
-						<Image alt="profile-nav-icon" />
-					</Box>
+					<Avatar size="xl" name="Sage" src="https://bit.ly/sage-adebayo" />
 				</Flex>
 				<Box gap={16} display={{ base: "block", sm: "none" }}>
 					<Image src={HamburgerIcon} alt="hamburger-nav-icon" />
