@@ -111,11 +111,18 @@ const ShoppingListDetail = () => {
 		{ id: "u3", name: "rákosníček", profilePicUrl: "https://cdn.myanimelist.net/r/84x124/images/characters/9/105421.webp?s=269ff1b2bb9abe3ac1bc443d3a76e863"},
 	];
 
+	useEffect(() => {
+		// Testing
+		setLoggedUser(userList[0]);
+		setOpenedItemListDetail(itemList[0]);
+	}, []);
+
 	// Testing
 	const handleUserChange = (index) => {
 		setLoggedUser(userList[index]);
 	};
 
+	// Testing
 	const handleListChange = (index) => {
 		const selectedList = itemList[index];
 		if (selectedList.memberList.includes(loggedUser.id) || selectedList.owner === loggedUser.id) {
@@ -127,11 +134,6 @@ const ShoppingListDetail = () => {
 		}
 	};
 
-	useEffect(() => {
-		// Testing
-		setLoggedUser(userList[0]);
-		setOpenedItemListDetail(itemList[0]);
-	}, []);
 
 	// edit name - done
 	const handleEdit = () => {
@@ -252,6 +254,7 @@ const ShoppingListDetail = () => {
 		currentList?.memberList.includes(user.id) || user.id === currentList?.owner
 	);
 
+	// ring around owner avatar
 	const ringCss = defineStyle({
 		outlineWidth: "2px",
 		outlineColor: "orange.500",
