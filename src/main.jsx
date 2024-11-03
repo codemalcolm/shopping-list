@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { Provider } from "./components/ui/provider.jsx";
@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import Root from "./Root.jsx";
 import ShoppingListDetail from "./ShoppingListDetail.jsx";
+
+
 
 const router = createBrowserRouter([
   {

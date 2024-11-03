@@ -23,7 +23,7 @@ const Navbar = () => {
 			w={"full"}
 		>
 			<Flex justifyContent={"space-between"} alignItems={"center"} gap={"48px"}>
-				<Box>Name</Box>
+				<Link href="/">Shopping List</Link>
 				<Flex
 					gap={8}
 					display={{ base: "none", sm: "flex" }}
