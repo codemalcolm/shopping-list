@@ -252,11 +252,6 @@ const ShoppingListDetail = () => {
 		currentList?.memberList.includes(user.id) || user.id === currentList?.owner
 	);
 
-	// loading
-	if (!openedItemListDetail) {
-		return <div>Loading...</div>;
-	}
-
 	const ringCss = defineStyle({
 		outlineWidth: "2px",
 		outlineColor: "orange.500",
@@ -487,56 +482,63 @@ const ShoppingListDetail = () => {
 							</AvatarGroup>
 						</Flex>
 						<DialogRoot size={"md"}>
-							<DialogTrigger asChild>
+						<DialogTrigger asChild>
 							<Button px={"32px"} borderRadius={"16px"} fontSize={"1em"}>
-								Add user to shopping list
+							{loggedUser?.id === currentList?.owner ? "Add user to shopping list" : "View Members"}
 							</Button>
-							</DialogTrigger>
-							<DialogContent>
+						</DialogTrigger>
+						
+						<DialogContent>
 							<DialogHeader>
-								<DialogTitle>Users</DialogTitle>
+							<DialogTitle>Users</DialogTitle>
 							</DialogHeader>
+							
 							<DialogBody>
 							<Flex flexDirection={"column"} gap={4}>
-							{userList.map((user) => {
-								const isAdded = currentList?.memberList.includes(user.id);
-								const isOwner = user.id === currentList?.owner;
+								{userList
+								.filter((user) => 
+									loggedUser?.id === currentList?.owner || // owner sees all users in the app
+									currentList?.memberList.includes(user.id) || // member sees only members
+									user.id === currentList?.owner // members see owner
+								)
+								.map((user) => {
+									const isAdded = currentList?.memberList.includes(user.id);
+									const isOwner = user.id === currentList?.owner;
 
-								return (
+									return (
 									<Flex key={user.id} justifyContent={"space-between"}>
 										<Flex gap={4} alignItems={"center"}>
-											<Avatar src={user.profilePicUrl} name={user.name} />
-											<Text>{user.name}</Text>
+										<Avatar src={user.profilePicUrl} name={user.name} />
+										<Text>{user.name}</Text>
 										</Flex>
+
 										{isOwner ? (
-											<Text lineHeight="18px" height="18px" fontSize="18px" color="orange.400" alignSelf="center">Owner</Text>
+										<Text lineHeight="18px" height="18px" fontSize="18px" color="orange.400" alignSelf="center">
+											Owner
+										</Text>
 										) : (
+										loggedUser?.id === currentList?.owner && ( // add/remove buttons for owner
 											<Button
-												bgColor={isAdded ? "red.500" : "green.500"}
-												onClick={() => isAdded ? handleDeleteUser(user.id) : handleAddUser(user.id)}
-												width={"125px"}
+											bgColor={isAdded ? "red.500" : "green.500"}
+											onClick={() => {
+												if (isAdded) {
+												handleDeleteUser(user.id);
+												} else {
+												handleAddUser(user.id);
+												}
+											}}
 											>
-												{isAdded ? "Remove User" : "Add user"}
+											{isAdded ? "Remove User" : "Add User"}
 											</Button>
+										)
 										)}
 									</Flex>
-								);
-							})}
-
+									);
+								})}
 							</Flex>
 							</DialogBody>
-							<DialogFooter>
-								<DialogActionTrigger asChild>
-								<Button variant="outline">Cancel</Button>
-								</DialogActionTrigger>
-								<DialogActionTrigger asChild>
-								<Button>Done</Button>
-								</DialogActionTrigger>
-							</DialogFooter>
-							<DialogCloseTrigger />
-							</DialogContent>
+						</DialogContent>
 						</DialogRoot>
-
 					</Flex>
 				</Flex>
 				)}
