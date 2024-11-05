@@ -40,7 +40,18 @@ const App = () => {
 	const [inputs, setInputs] = useState({
 		listName: "",
 		membersList: [],
+		itemList:[]
 	});
+
+	const [itemInput, setItemInputs] = useState({
+		id: "4",
+		itemName: "",
+		quantity: 0,
+		shoppingListId: "td03",
+		isDone: false,
+	});
+
+	const [addItem, setAddItem] = useState(false)
 	const [fetchUsers, setFetchUsers ] = useState(false)
 	const [loggedUser, setlLoggedUser] = useState();
 	const [itemList, setItemList] = useState([
@@ -166,7 +177,7 @@ const App = () => {
 					</Text>
 					<Flex gap={2}>
 						<Button borderRadius={"16px"}>Filter</Button>
-						<DialogRoot>
+						<DialogRoot onOpenChange={() => {setFetchUsers(false), setAddItem(false)}}>
 							<DialogTrigger asChild>
 								<Button borderRadius={"16px"} px={"32px"}>
 									Add shopping list
@@ -179,7 +190,7 @@ const App = () => {
 								</DialogHeader>
 								<DialogBody>
 									<Flex gap={4} flexDirection={"column"} alignItems={"center"}>
-										<Field label="Name" required>
+										<Field label="Name" required w="81%">
 											<Input
 												placeholder="Enter shopping list name"
 												onChange={(e) =>
@@ -237,9 +248,48 @@ const App = () => {
 												</Collapsible.Content>
 											</Flex>
 										</Collapsible.Root>
-										<Button w={"80%"}>
-											Add items <Image w="25px" h="25px" src={addIcon} />
-										</Button>
+										<Collapsible.Root style={{ width: "100%" }}>
+											<Flex flexDirection="column" alignItems="center" w="100%">
+												<Collapsible.Trigger>
+												<Button w={"375px"}>
+													Add items <Image w="25px" h="25px" src={addIcon} />
+												</Button>
+												</Collapsible.Trigger>
+
+												<Collapsible.Content
+													style={{ display: "flex", justifyContent: "center", width:"100%", height:"100%" }}
+												>
+													<Flex
+														padding="4"
+														borderWidth="1px"
+														w="375px"
+														mt="4"
+														justifyContent="center"
+														alignItems={"center"}
+														flexDirection={"column"}
+														gap={2}
+													>
+													<Button borderRadius="full" p={0}><Image w="25px" h="25px" src={addIcon}/></Button>
+													<Flex gap={4} alignItems={"end"}>
+														<Field label="Item name" w={"35%"}>
+															<Input />
+
+														</Field>
+														<Field label="Quantity" w={"35%"}>
+															<Input />
+
+														</Field>
+														<Box w={"25%"}>
+
+														<Button>Add item</Button>
+														</Box>
+														
+													</Flex>
+													</Flex>
+												</Collapsible.Content>
+											</Flex>
+										</Collapsible.Root>
+
 									</Flex>
 								</DialogBody>
 								<DialogFooter>
