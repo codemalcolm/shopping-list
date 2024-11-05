@@ -43,13 +43,12 @@ const App = () => {
 		itemList:[]
 	});
 
-	const [itemInput, setItemInputs] = useState({
-		id: "4",
+	const [itemInputs, setItemInputs] = useState({
 		itemName: "",
 		quantity: 0,
-		shoppingListId: "td03",
-		isDone: false,
 	});
+
+	const [itemsArr, setItemsArr] = useState([])
 
 	const [addItem, setAddItem] = useState(false)
 	const [fetchUsers, setFetchUsers ] = useState(false)
@@ -114,8 +113,16 @@ const App = () => {
 	}, []);
 
 	// add shopping list
-	const handleAddShoppingList = (inputs) => {
+	const handleAddShoppingList = (inputs, itemInputs = null) => {
 		if (inputs) {
+			if(itemInputs !== null){
+				const newItem = {
+					id: Math.random().toString(36).substr(2, 9), // Random id
+					itemName: itemInputs.itemName,
+					quantity: itemInputs.quantity,
+					isDone: false,
+				}
+			}
 			const newItemList = {
 				id: Math.random().toString(36).substr(2, 9), // Random id
 				name: inputs.listName,
@@ -124,19 +131,31 @@ const App = () => {
 				memberList: inputs.membersList,
 				isDone: false,
 			};
-
 			setItemList((prevItemLists) => [...prevItemLists, newItemList]);
 			console.log(newItemList);
 			return;
 		}
 		console.log("Something went wrong");
 	};
-
+	
 	// add user
 	const handleAddUser = () => {
 		setFetchUsers(!fetchUsers)
 	};
 
+	// add field input 
+	const handleAddInputFields = () =>{
+		const newInputField = {
+			id: Math.random().toString(36).substr(2, 9), // Random id
+			listMame: "",
+			quantity: null
+		}
+		setItemsArr((prevItemsInArr) => [...prevItemsInArr, newInputField])
+	}
+
+
+
+	console.log(itemsArr)
 	return (
 		<>
 			{/* Testing */}
@@ -269,22 +288,47 @@ const App = () => {
 														flexDirection={"column"}
 														gap={2}
 													>
-													<Button borderRadius="full" p={0}><Image w="25px" h="25px" src={addIcon}/></Button>
-													<Flex gap={4} alignItems={"end"}>
+													<Button borderRadius="full" p={0} onClick={() => {handleAddInputFields()}}><Image w="25px" h="25px" src={addIcon}/></Button>
+													{itemsArr?.map((item)=>(
+														<Flex gap={4} alignItems={"end"} key={item.id}>
 														<Field label="Item name" w={"35%"}>
-															<Input />
+															<Input onChange={(e) =>
+															setItemInputs({ ...itemInputs, itemName: e.target.value })
+
+														}/>
 
 														</Field>
 														<Field label="Quantity" w={"35%"}>
-															<Input />
+															<Input onChange={(e) =>
+															setItemInputs({ ...itemInputs, quantity: e.target.value })
+														}/>
 
 														</Field>
 														<Box w={"25%"}>
 
-														<Button>Add item</Button>
+														{(itemInputs.itemName !== "" && itemInputs.quantity !== "")  &&
+															<Button onClick={() => {
+																setItemsArr(
+																	[
+																		...itemsArr,
+																		{
+																			id: Math.random().toString(36).substr(2, 9), // Random id
+																			name:itemInputs.itemName,
+																			quantity:itemInputs.quantity,
+																		}
+																	]
+																)}
+																}
+															>
+																Add item
+															</Button>
+														}
+														
 														</Box>
 														
 													</Flex>
+													))}
+													
 													</Flex>
 												</Collapsible.Content>
 											</Flex>
