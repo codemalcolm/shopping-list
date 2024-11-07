@@ -29,54 +29,32 @@ const ShoppingListDetail = () => {
 	
 	const [showFinishedItems, setShowFinishedItems] = useState(false);
 	const [loggedUser, setLoggedUser] = useState(null);
-	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", memberList: [], isDone: false });
+	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", memberList: [], itemList:[], isDone: false });
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const [items, setItems] = useState([
-		{
-			id: "1",
-			name: "Apples",
-			quantity: 5,
-			shoppingListId: "td01",
-			isDone: false,
-		},
-		{
-			id: "2",
-			name: "Bananas",
-			quantity: 6,
-			shoppingListId: "td01",
-			isDone: true,
-		},
-		{
-			id: "3",
-			name: "Milk",
-			quantity: 1,
-			shoppingListId: "td02",
-			isDone: false,
-		},
-		{
-			id: "4",
-			name: "Bread",
-			quantity: 2,
-			shoppingListId: "td03",
-			isDone: true,
-		},
-		{
-			id: "5",
-			name: "Eggs",
-			quantity: 12,
-			shoppingListId: "td04",
-			isDone: false,
-		},
+
+
+		// removal in progress
+
+
 	]);
 
-	const [itemList, setItemList] = useState([
+	const [shoppingList, setShoppingList] = useState([
 		{
 			id: "td01",
 			name: "První úkolovník",
 			state: "active",
 			owner: "u1",
 			memberList: ["u2", "u3"],
+			itemList:[
+				{
+					id: "2",
+					name: "Bananas",
+					quantity: 6,
+					isDone: false,
+				},
+			],
 			isDone: false,
 		},
 		{
@@ -85,6 +63,14 @@ const ShoppingListDetail = () => {
 			state: "archived",
 			owner: "u2",
 			memberList: ["u3"],
+			itemList:[
+				{
+					id: "3",
+					name: "Milk",
+					quantity: 1,
+					isDone: false,
+				},
+			],
 			isDone: true,
 		},
 		{
@@ -93,6 +79,20 @@ const ShoppingListDetail = () => {
 			state: "active",
 			owner: "u3",
 			memberList: ["u1"],
+			itemList:[
+				{
+					id: "5",
+					name: "Eggs",
+					quantity: 12,
+					isDone: false,
+				},
+				{
+					id: "4",
+					name: "Bread",
+					quantity: 2,
+					isDone: true,
+				},
+			],
 			isDone: false,
 		},
 		{
@@ -101,9 +101,20 @@ const ShoppingListDetail = () => {
 			state: "archived",
 			owner: "u1",
 			memberList: [],
+			itemList:[
+				{
+					id: "1",
+					name: "Apples",
+					quantity: 5,
+					isDone: false,
+				},
+			],
 			isDone: true,
 		},
 	]);
+
+	// items in the opened shopping list
+	const currentItems = openedItemListDetail.itemList
 
 	const userList = [
 		{ id: "u1", name: "vochomůrka", profilePicUrl: "https://cdn.myanimelist.net/r/84x124/images/characters/9/131317.webp?s=d4b03c7291407bde303bc0758047f6bd" },
@@ -114,7 +125,7 @@ const ShoppingListDetail = () => {
 	useEffect(() => {
 		// Testing
 		setLoggedUser(userList[0]);
-		setOpenedItemListDetail(itemList[0]);
+		setOpenedItemListDetail(shoppingList[0]);
 	}, []);
 
 	// Testing
@@ -124,7 +135,7 @@ const ShoppingListDetail = () => {
 
 	// Testing
 	const handleListChange = (index) => {
-		const selectedList = itemList[index];
+		const selectedList = shoppingList[index];
 		if (selectedList.memberList.includes(loggedUser.id) || selectedList.owner === loggedUser.id) {
 			setOpenedItemListDetail(selectedList);
 			setErrorMessage("");
@@ -139,7 +150,7 @@ const ShoppingListDetail = () => {
 	const handleEdit = () => {
 		const newName = prompt("Enter new name for the shopping list:", openedItemListDetail.name);
 		if (newName) {
-		  setItemList(prevList =>
+		  setShoppingList(prevList =>
 			prevList.map(list =>
 			  list.id === openedItemListDetail.id ? { ...list, name: newName } : list
 			)
@@ -152,21 +163,28 @@ const ShoppingListDetail = () => {
 	const navigate = useNavigate();
 	const handleLeave = () => {
 		if (loggedUser) {
-			setItemList((prevList) =>
-				prevList.map((list) =>
-					list.id === openedItemListDetail.id
-						? {
-								...list,
-								memberList: list.memberList.filter(
-									(member) => member !== loggedUser.id
-								),
-						  }
+			setShoppingList((prevList) =>
+			prevList.map((list) =>
+				list.id === openedItemListDetail.id
+					? {
+							...list,
+							memberList: list.memberList.filter(
+								(member) => member !== loggedUser.id
+							),
+						}
 						: list
-				)
-			);
+					)
+				);
 			alert(`You have left the shopping list: ${openedItemListDetail.name}`);
 			navigate("/")
 		}
+	};
+
+	// list delete - done
+	const handleDeleteList = (listId) => {
+		setShoppingList(prevList => prevList.filter((list) => list.id !== listId));
+		alert("List has been deleted")
+		navigate('/');
 	};
 
 	// item add - done
@@ -179,44 +197,83 @@ const ShoppingListDetail = () => {
 			id: Math.random().toString(36).substr(2, 9), // Random id
 			name: itemName,
 			quantity: parseInt(itemQuantity, 10),
-			shoppingListId: openedItemListDetail.id,
 			isDone: false,
-		  };
+		};
+		
+		setShoppingList((prevItems) =>
+			prevItems.map((list) =>
+				list.id === openedItemListDetail.id
+					? { ...list, itemList: [...list.itemList, newItem] }
+					: list
+			)
+		);
 
-		  setItems(prevItems => [...prevItems, newItem]);
+		setOpenedItemListDetail((prevDetail) => ({
+			...prevDetail,
+			itemList: [...prevDetail.itemList, newItem],
+		}));
+
 		}
 	};
 
-	// item delete - done
+	// item delete - done 
 	const handleDeleteItem = (itemId) => {
-		setItems(prevItems => prevItems.filter(item => item.id !== itemId));
-	};
-
-	// item - done
-	const handleFinishItem = (itemId) => {
-		setItems((prevItems) =>
-			prevItems.map((item) =>
-				item.id === itemId ? { ...item, isDone: !item.isDone } : item
+		
+		setShoppingList((prevItems) =>
+			prevItems.map((list) =>
+				list.id === openedItemListDetail.id
+					? { ...list, itemList: list.itemList.filter((item) => item.id !== itemId) }
+					: list
 			)
 		);
+	
+		setOpenedItemListDetail((prevDetail) => ({
+			...prevDetail,
+			itemList: prevDetail.itemList.filter((item) => item.id !== itemId),
+		}));
 	};
 
-	// filter - done
+	console.log(currentItems);
+
+	// item finish - done
+	const handleFinishItem = (itemId) => {
+		setShoppingList((prevItems) =>
+			prevItems.map((list) =>
+				list.id === openedItemListDetail.id
+					? {
+						...list,
+						itemList: list.itemList.map((item) =>
+							item.id === itemId ? { ...item, isDone: !item.isDone } : item
+						),
+					}
+					: list
+			)
+		);
+	
+		setOpenedItemListDetail((prevDetail) => ({
+			...prevDetail,
+			itemList: prevDetail.itemList.map((item) =>
+				item.id === itemId ? { ...item, isDone: !item.isDone } : item
+			),
+		}));
+	};
+
+	// filter
 	const handleFilter = () => {
 		setShowFinishedItems(!showFinishedItems);
 	};
 
-	// add user - done
+	// add user - done 
 	const handleAddUser = (userId) => {
 
-		const updatedList = itemList.map((list) => {
+		const updatedList = shoppingList.map((list) => {
 			if (list.id === openedItemListDetail.id && !list.memberList.includes(userId)) {
 				return { ...list, memberList: [...list.memberList, userId] };
 			}
 			return list;
 		});
 	
-		setItemList(updatedList);
+		setShoppingList(updatedList);
 		setOpenedItemListDetail((prev) => ({
 			...prev,
 			memberList: [...prev.memberList, userId],
@@ -226,7 +283,7 @@ const ShoppingListDetail = () => {
 	// delete user - done
 	const handleDeleteUser = (userId) => {
 
-		const updatedList = itemList.map((list) => {
+		const updatedList = shoppingList.map((list) => {
 			if (list.id === openedItemListDetail.id) {
 				return {
 					...list,
@@ -236,20 +293,13 @@ const ShoppingListDetail = () => {
 			return list;
 		});
 	
-		setItemList(updatedList);
+		setShoppingList(updatedList);
 		console.log("User deleted");
 		
 	}
-
-	// list delete - done
-	const handleDeleteList = (listId) => {
-		setItemList(prevList => prevList.filter(list => list.id !== listId));
-		alert("List has been deleted")
-		navigate('/');
-	};
 	
 	// members
-	const currentList = itemList.find((item) => item.id === openedItemListDetail.id); 
+	const currentList = shoppingList.find((item) => item.id === openedItemListDetail.id); 
 	const currentListMembers = userList.filter((user) => 
 		currentList?.memberList.includes(user.id) || user.id === currentList?.owner
 	);
@@ -300,7 +350,7 @@ const ShoppingListDetail = () => {
 						</Button>
 					</MenuTrigger>
 					<MenuContent>
-						{itemList.map((item, index) => (
+						{shoppingList.map((item, index) => (
 							<MenuItem
 								value={item.id}
 								key={item.id}
@@ -434,11 +484,7 @@ const ShoppingListDetail = () => {
 									<Text fontWeight={500}>Item name</Text>
 									<Text fontWeight={500}>Quantity</Text>
 								</Flex>
-								{items
-									.filter(
-										(item) => item.shoppingListId === openedItemListDetail.id
-									)
-									.filter((item) => showFinishedItems || !item.isDone) // all if true, unfinished if false
+								{currentItems?.filter((item) => showFinishedItems || !item.isDone)
 									.map((item) => (
 										<ShoppingListItem
 											key={item.id}
@@ -446,7 +492,7 @@ const ShoppingListDetail = () => {
 											quantity={item.quantity}
 											isDone={item.isDone}
 											onFinish={() => handleFinishItem(item.id)}
-											onDelete={() =>{handleDeleteItem(item.id)}}
+											onDelete={() =>handleDeleteItem(item.id)}
 										/>
 									))}
 							</Flex>
