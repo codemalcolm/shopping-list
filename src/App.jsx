@@ -153,6 +153,15 @@ const App = () => {
 		setItemsArr((prevItemsInArr) => [...prevItemsInArr, newInputField])
 	}
 
+	// delete list - done
+	const handleDeleteList = (listId) => {
+		const deleteList = confirm("Do you want to delete this shopping list ?")
+		if(deleteList){
+			setItemList(prevItemList => prevItemList.filter((item) => item.id !== listId))
+
+		}
+
+	}
 
 
 	console.log(itemsArr)
@@ -391,6 +400,7 @@ const App = () => {
 											objectFit="cover"
 											cursor="pointer"
 											src={deleteIcon}
+											onClick={() => {handleDeleteList(item.id)}}
 										/>
 									</>
 								)}
