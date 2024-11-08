@@ -12,7 +12,7 @@ import {
 	MenuTrigger,
 } from "./components/ui/menu";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	DialogBody,
 	DialogCloseTrigger,
@@ -31,6 +31,7 @@ const ShoppingListDetail = () => {
 	const [loggedUser, setLoggedUser] = useState(null);
 	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", memberList: [], itemList:[], isDone: false });
 	const [errorMessage, setErrorMessage] = useState("");
+	const { shoppingListId } = useParams();
 
 	const [items, setItems] = useState([
 
@@ -125,7 +126,8 @@ const ShoppingListDetail = () => {
 	useEffect(() => {
 		// Testing
 		setLoggedUser(userList[0]);
-		setOpenedItemListDetail(shoppingList[0]);
+		const selectedList = shoppingList.find((list) => list.id === shoppingListId);
+		setOpenedItemListDetail(selectedList);
 	}, []);
 
 	// Testing
@@ -343,7 +345,7 @@ const ShoppingListDetail = () => {
 						))}
 					</MenuContent>
 				</MenuRoot>
-				<MenuRoot>
+				{/* <MenuRoot>
 					<MenuTrigger asChild>
 						<Button variant="outline" size="sm">
 							<Text color={"red.500"}>Click me</Text> to change shopping list
@@ -370,7 +372,7 @@ const ShoppingListDetail = () => {
 							</MenuItem>
 						))}
 					</MenuContent>
-				</MenuRoot>
+				</MenuRoot> */}
 			</Flex>
 
 			<Flex

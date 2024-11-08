@@ -25,8 +25,13 @@ const router = createBrowserRouter([
       },
       {
         path: "list-detail",
-        element: <ShoppingListDetail />,
         // loader: teamLoader,
+        children: [
+          {
+            path:":shoppingListId",
+            element: <ShoppingListDetail />,
+          }
+        ]
       },
     ],
   },

@@ -35,8 +35,10 @@ import {
 } from "./components/ui/dialog";
 import { Field } from "./components/ui/field";
 import { Avatar } from "./components/ui/avatar";
+import { useNavigate } from "react-router";
 
 const App = () => {
+	const navigate = useNavigate()
 	const [inputs, setInputs] = useState({
 		listName: "",
 		membersList: [],
@@ -53,14 +55,24 @@ const App = () => {
 	const [addItem, setAddItem] = useState(false)
 	const [fetchUsers, setFetchUsers ] = useState(false)
 	const [loggedUser, setlLoggedUser] = useState();
-	const [itemList, setItemList] = useState([
+
+	const [shoppingList, setShoppingList] = useState([
 		{
 			id: "td01",
 			name: "První úkolovník",
 			state: "active",
 			owner: "u1",
 			memberList: ["u2", "u3"],
+			itemList:[
+				{
+					id: "2",
+					name: "Bananas",
+					quantity: 6,
+					isDone: false,
+				},
+			],
 			isDone: false,
+			isArchived:false
 		},
 		{
 			id: "td02",
@@ -68,7 +80,16 @@ const App = () => {
 			state: "archived",
 			owner: "u2",
 			memberList: ["u3"],
+			itemList:[
+				{
+					id: "3",
+					name: "Milk",
+					quantity: 1,
+					isDone: false,
+				},
+			],
 			isDone: true,
+			isArchived:true
 		},
 		{
 			id: "td03",
@@ -76,7 +97,22 @@ const App = () => {
 			state: "active",
 			owner: "u3",
 			memberList: ["u1"],
+			itemList:[
+				{
+					id: "5",
+					name: "Eggs",
+					quantity: 12,
+					isDone: false,
+				},
+				{
+					id: "4",
+					name: "Bread",
+					quantity: 2,
+					isDone: true,
+				},
+			],
 			isDone: false,
+			isArchived:true
 		},
 		{
 			id: "td04",
@@ -84,15 +120,16 @@ const App = () => {
 			state: "archived",
 			owner: "u1",
 			memberList: [],
+			itemList:[
+				{
+					id: "1",
+					name: "Apples",
+					quantity: 5,
+					isDone: false,
+				},
+			],
 			isDone: true,
-		},
-		{
-			id: "td05",
-			name: "Pátý úkolovník",
-			state: "archived",
-			owner: "u2",
-			memberList: ["u1"],
-			isDone: true,
+			isArchived:true
 		},
 	]);
 
@@ -131,7 +168,7 @@ const App = () => {
 				memberList: inputs.membersList,
 				isDone: false,
 			};
-			setItemList((prevItemLists) => [...prevItemLists, newItemList]);
+			setShoppingList((prevItemLists) => [...prevItemLists, newItemList]);
 			console.log(newItemList);
 			return;
 		}
@@ -157,14 +194,17 @@ const App = () => {
 	const handleDeleteList = (listId) => {
 		const deleteList = confirm("Do you want to delete this shopping list ?")
 		if(deleteList){
-			setItemList(prevItemList => prevItemList.filter((item) => item.id !== listId))
+			setShoppingList(prevItemList => prevItemList.filter((item) => item.id !== listId))
 
 		}
 
 	}
 
+	// Navigate to list detail
+	const handleShowListDetail = (id) => {
+		navigate(`/list-detail/${id}`);
+	};
 
-	console.log(itemsArr)
 	return (
 		<>
 			{/* Testing */}
@@ -360,7 +400,9 @@ const App = () => {
 						</DialogRoot>
 					</Flex>
 				</Flex>
-				{itemList?.map((item) => (
+				{shoppingList?.map((item) => (
+					item.memberList.includes(loggedUser?.id) || item.owner === loggedUser?.id ? (
+
 					<Box key={item.id} border={"1px solid black"} px={"32px"} py={"32px"}>
 						<Flex justifyContent={"space-between"} alignItems={"center"}>
 							<Flex gap={4} alignItems={"center"}>
@@ -371,10 +413,10 @@ const App = () => {
 								/>
 								<Text>{item.name}</Text>
 							</Flex>
-							<Flex gap={4}>
-								<Link href="list-detail">
+							<Flex gap={4} alignItems={"center"}>
+								<Button onClick={()=> handleShowListDetail(item.id) } variant="ghost" p={0} m={0}>
 									<Image w="32px" h="32px" objectFit="cover" src={showIcon} />
-								</Link>
+								</Button>
 								{loggedUser && (
 									<>
 										<Image
@@ -407,6 +449,7 @@ const App = () => {
 							</Flex>
 						</Flex>
 					</Box>
+					) : null
 				))}
 			</Flex>
 		</>
