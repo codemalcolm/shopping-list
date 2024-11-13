@@ -39,18 +39,15 @@ import { useNavigate } from "react-router";
 
 const App = () => {
 	const navigate = useNavigate()
+
 	const [inputs, setInputs] = useState({
 		listName: "",
 		membersList: [],
+
 		itemList:[]
 	});
 
-	const [itemInputs, setItemInputs] = useState({
-		itemName: "",
-		quantity: 0,
-	});
-
-	const [itemsArr, setItemsArr] = useState([])
+	const [itemsFromInputs, setItemsFromInputs] = useState([])
 
 	const [addItem, setAddItem] = useState(false)
 	const [fetchUsers, setFetchUsers ] = useState(false)
@@ -142,7 +139,6 @@ const App = () => {
 	// Testing purposes
 	const handleUserChange = (index) => {
 		setlLoggedUser(userList[index]);
-		console.log("heree");
 	};
 
 	useEffect(() => {
@@ -150,30 +146,56 @@ const App = () => {
 	}, []);
 
 	// add shopping list
-	const handleAddShoppingList = (inputs, itemInputs = null) => {
-		if (inputs) {
-			if(itemInputs !== null){
-				const newItem = {
-					id: Math.random().toString(36).substr(2, 9), // Random id
-					itemName: itemInputs.itemName,
-					quantity: itemInputs.quantity,
-					isDone: false,
-				}
-			}
-			const newItemList = {
+	const handleAddShoppingList = (inputs, itemInputs) => {
+
+		if (inputs.listName !== "") {
+			const newShoppingList = {
 				id: Math.random().toString(36).substr(2, 9), // Random id
 				name: inputs.listName,
 				state: "active",
 				owner: loggedUser.id,
 				memberList: inputs.membersList,
+				itemList:[],
 				isDone: false,
 			};
-			setShoppingList((prevItemLists) => [...prevItemLists, newItemList]);
-			console.log(newItemList);
+
+			if(itemInputs){
+				itemInputs.forEach(item => {
+					const newItem = {
+						id: item.id,
+						itemName: item.itemName,
+						quantity: item.itemQuantity,
+						isDone: false,
+					}
+					newShoppingList.itemList.push(newItem);
+					console.log(newShoppingList.itemList)
+				});
+				
+			}
+			setShoppingList((prevItemLists) => [...prevItemLists, newShoppingList]);
+
 			return;
 		}
 		console.log("Something went wrong");
 	};
+	console.log(shoppingList);
+
+	// add item
+	const handleAddItem = (itemId) =>{
+		const item = inputs.itemList.find((item) => item.id === itemId)
+		const itemName = item ? item.listName : null
+		const itemQuantity = item ? item.quantity : null
+
+		const newItem = {
+			id: itemId,
+			itemName: itemName,
+			quantity: itemQuantity,
+			isDone: false,
+			// append item to items array that will be later pushed into itemList array in shoppingList
+		}
+		setItemsFromInputs((prevItems) => [...prevItems, newItem])
+	}
+
 	
 	// add user
 	const handleAddUser = () => {
@@ -184,11 +206,27 @@ const App = () => {
 	const handleAddInputFields = () =>{
 		const newInputField = {
 			id: Math.random().toString(36).substr(2, 9), // Random id
-			listMame: "",
+			listName: "",
 			quantity: null
 		}
-		setItemsArr((prevItemsInArr) => [...prevItemsInArr, newInputField])
+		
+		setInputs(prevInputs =>({
+			...prevInputs,
+			itemList: [...prevInputs.itemList, newInputField]
+		}))
+
 	}
+
+	// input change of itemList in inputs 
+	const handleInputChange = (id, field, value) => {
+		setInputs((prevInputs) => ({
+			...prevInputs,
+			itemList: prevInputs.itemList.map((item) =>
+				item.id === id ? { ...item, [field]: value } : item
+			),
+		}));
+	};
+
 
 	// delete list - done
 	const handleDeleteList = (listId) => {
@@ -252,6 +290,7 @@ const App = () => {
 								</Button>
 							</DialogTrigger>
 
+							{/* Create shopping list modal */}
 							<DialogContent>
 								<DialogHeader>
 									<DialogTitle>Create a Shopping list</DialogTitle>
@@ -269,13 +308,14 @@ const App = () => {
 										<Collapsible.Root style={{ width: "100%" }}>
 											<Flex flexDirection="column" alignItems="center" w="100%">
 												<Collapsible.Trigger>
+													{/* Opens users menu */}
 													<Button
 														w={"375px"}
 														onClick={() => {
-															handleAddUser();
+															setFetchUsers(!fetchUsers)
 														}}
 													>
-														Add user{" "}
+														Add user
 														<Image w="22px" h="22px" src={addUserIcon} />
 													</Button>
 												</Collapsible.Trigger>
@@ -294,23 +334,26 @@ const App = () => {
 													>
 													{fetchUsers && 
 													userList.map((user) =>(
-														<Flex key={user.id} justifyContent={"space-between"}>
-															<Flex gap={4} alignItems={"center"}>
-															<Avatar src={user.profilePicUrl} name={user.name} />
-															<Text>{user.name}</Text>
-															</Flex>
-															<Button
-															bgColor={
-																// isAdded ? "red.500" : 
-																"green.500"}
-															onClick={() => {
-																handleAddUser(user.id);
-															}}
-															>
-															{"Add User"}
-															</Button>
+														user.id !== loggedUser.id ? (
+															<Flex key={user.id} justifyContent={"space-between"}>
+																<Flex gap={4} alignItems={"center"}>
+																<Avatar src={user.profilePicUrl} name={user.name} />
+																<Text>{user.name}</Text>
+																</Flex>
+																{/* Adds user */}
+																<Button
+																bgColor={
+																	// isAdded ? "red.500" : 
+																	"green.500"}
+																onClick={() => {
+																	handleAddUser(user.id);
+																}}
+																>
+																{"Add User"}
+																</Button>
 
-														</Flex>
+															</Flex>
+														): null
 													))}
 													</Flex>
 												</Collapsible.Content>
@@ -338,37 +381,23 @@ const App = () => {
 														gap={2}
 													>
 													<Button borderRadius="full" p={0} onClick={() => {handleAddInputFields()}}><Image w="25px" h="25px" src={addIcon}/></Button>
-													{itemsArr?.map((item)=>(
+													{inputs?.itemList?.map((item)=>(
 														<Flex gap={4} alignItems={"end"} key={item.id}>
 														<Field label="Item name" w={"35%"}>
-															<Input onChange={(e) =>
-															setItemInputs({ ...itemInputs, itemName: e.target.value })
-
-														}/>
+															<Input
+															onChange={(e) => handleInputChange(item.id, "listName", e.target.value)}
+															/>
 
 														</Field>
 														<Field label="Quantity" w={"35%"}>
-															<Input onChange={(e) =>
-															setItemInputs({ ...itemInputs, quantity: e.target.value })
-														}/>
+															<Input 
+															onChange={(e) => handleInputChange(item.id, "quantity", e.target.value)}/>
 
 														</Field>
 														<Box w={"25%"}>
 
-														{(itemInputs.itemName !== "" && itemInputs.quantity !== "")  &&
-															<Button onClick={() => {
-																setItemsArr(
-																	[
-																		...itemsArr,
-																		{
-																			id: Math.random().toString(36).substr(2, 9), // Random id
-																			name:itemInputs.itemName,
-																			quantity:itemInputs.quantity,
-																		}
-																	]
-																)}
-																}
-															>
+														{(item.itemName !== "" && item.quantity !== "")  &&
+															<Button onClick={() => handleAddItem(item.id)}>
 																Add item
 															</Button>
 														}
@@ -390,7 +419,7 @@ const App = () => {
 										<Button variant="outline">Cancel</Button>
 									</DialogActionTrigger>
 									<DialogActionTrigger asChild>
-										<Button onClick={() => handleAddShoppingList(inputs)}>
+										<Button onClick={() => handleAddShoppingList(inputs,itemsFromInputs)}>
 											Add Shopping List
 										</Button>
 									</DialogActionTrigger>
