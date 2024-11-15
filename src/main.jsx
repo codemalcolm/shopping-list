@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Root from "./Root.jsx";
 import ShoppingListDetail from "./ShoppingListDetail.jsx";
+import { ShoppingListProvider } from "./context/ShoppingListContext.jsx";
 
 
 
@@ -40,7 +41,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<Provider value={defaultSystem}>
+    <ShoppingListProvider>
+
       <RouterProvider router={router} />
+    </ShoppingListProvider>
 		</Provider>
 	</StrictMode>
 );

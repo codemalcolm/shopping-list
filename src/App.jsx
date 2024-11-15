@@ -36,14 +36,16 @@ import {
 import { Field } from "./components/ui/field";
 import { Avatar } from "./components/ui/avatar";
 import { useNavigate } from "react-router";
+import { useShoppingList } from "./context/ShoppingListContext";
 
 const App = () => {
 	const navigate = useNavigate()
+	const { shoppingList,setShoppingList, userList } = useShoppingList();
+	
 
 	const [inputs, setInputs] = useState({
 		listName: "",
 		membersList: [],
-
 		itemList:[]
 	});
 
@@ -52,89 +54,6 @@ const App = () => {
 	const [addItem, setAddItem] = useState(false)
 	const [fetchUsers, setFetchUsers ] = useState(false)
 	const [loggedUser, setlLoggedUser] = useState();
-
-	const [shoppingList, setShoppingList] = useState([
-		{
-			id: "td01",
-			name: "První úkolovník",
-			state: "active",
-			owner: "u1",
-			memberList: ["u2", "u3"],
-			itemList:[
-				{
-					id: "2",
-					name: "Bananas",
-					quantity: 6,
-					isDone: false,
-				},
-			],
-			isDone: false,
-			isArchived:false
-		},
-		{
-			id: "td02",
-			name: "Druhý úkolovník",
-			state: "archived",
-			owner: "u2",
-			memberList: ["u3"],
-			itemList:[
-				{
-					id: "3",
-					name: "Milk",
-					quantity: 1,
-					isDone: false,
-				},
-			],
-			isDone: true,
-			isArchived:true
-		},
-		{
-			id: "td03",
-			name: "Třetí úkolovník",
-			state: "active",
-			owner: "u3",
-			memberList: ["u1"],
-			itemList:[
-				{
-					id: "5",
-					name: "Eggs",
-					quantity: 12,
-					isDone: false,
-				},
-				{
-					id: "4",
-					name: "Bread",
-					quantity: 2,
-					isDone: true,
-				},
-			],
-			isDone: false,
-			isArchived:true
-		},
-		{
-			id: "td04",
-			name: "čtvrtý úkolovník",
-			state: "archived",
-			owner: "u1",
-			memberList: [],
-			itemList:[
-				{
-					id: "1",
-					name: "Apples",
-					quantity: 5,
-					isDone: false,
-				},
-			],
-			isDone: true,
-			isArchived:true
-		},
-	]);
-
-	const userList = [
-		{ id: "u1", name: "vochomůrka" },
-		{ id: "u2", name: "křemílek" },
-		{ id: "u3", name: "rákosníček" },
-	];
 
 	// Testing purposes
 	const handleUserChange = (index) => {
@@ -163,12 +82,11 @@ const App = () => {
 				itemInputs.forEach(item => {
 					const newItem = {
 						id: item.id,
-						itemName: item.itemName,
+						name: item.itemName,
 						quantity: item.itemQuantity,
 						isDone: false,
 					}
 					newShoppingList.itemList.push(newItem);
-					console.log(newShoppingList.itemList)
 				});
 				
 			}
@@ -178,23 +96,23 @@ const App = () => {
 		}
 		console.log("Something went wrong");
 	};
-	console.log(shoppingList);
 
 	// add item
 	const handleAddItem = (itemId) =>{
 		const item = inputs.itemList.find((item) => item.id === itemId)
-		const itemName = item ? item.listName : null
+		const itemName = item ? item.itemName : null
 		const itemQuantity = item ? item.quantity : null
 
 		const newItem = {
 			id: itemId,
-			itemName: itemName,
+			name: itemName,
 			quantity: itemQuantity,
 			isDone: false,
 			// append item to items array that will be later pushed into itemList array in shoppingList
 		}
 		setItemsFromInputs((prevItems) => [...prevItems, newItem])
 	}
+	console.log(itemsFromInputs)
 
 	
 	// add user
@@ -206,8 +124,8 @@ const App = () => {
 	const handleAddInputFields = () =>{
 		const newInputField = {
 			id: Math.random().toString(36).substr(2, 9), // Random id
-			listName: "",
-			quantity: null
+			itemName: "",
+			quantity: "",
 		}
 		
 		setInputs(prevInputs =>({
@@ -225,6 +143,7 @@ const App = () => {
 				item.id === id ? { ...item, [field]: value } : item
 			),
 		}));
+		console.log(inputs)
 	};
 
 
@@ -385,7 +304,7 @@ const App = () => {
 														<Flex gap={4} alignItems={"end"} key={item.id}>
 														<Field label="Item name" w={"35%"}>
 															<Input
-															onChange={(e) => handleInputChange(item.id, "listName", e.target.value)}
+															onChange={(e) => handleInputChange(item.id, "itemName", e.target.value)}
 															/>
 
 														</Field>

@@ -24,9 +24,10 @@ import {
 	DialogTrigger,
 	DialogActionTrigger,
   } from "./components/ui/dialog"
+import { useShoppingList } from "./context/ShoppingListContext";
 
 const ShoppingListDetail = () => {
-	
+	const { shoppingList,setShoppingList, userList } = useShoppingList();
 	const [showFinishedItems, setShowFinishedItems] = useState(false);
 	const [loggedUser, setLoggedUser] = useState(null);
 	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", memberList: [], itemList:[], isDone: false });
@@ -41,87 +42,8 @@ const ShoppingListDetail = () => {
 
 	]);
 
-	const [shoppingList, setShoppingList] = useState([
-		{
-			id: "td01",
-			name: "První úkolovník",
-			state: "active",
-			owner: "u1",
-			memberList: ["u2", "u3"],
-			itemList:[
-				{
-					id: "2",
-					name: "Bananas",
-					quantity: 6,
-					isDone: false,
-				},
-			],
-			isDone: false,
-		},
-		{
-			id: "td02",
-			name: "Druhý úkolovník",
-			state: "archived",
-			owner: "u2",
-			memberList: ["u3"],
-			itemList:[
-				{
-					id: "3",
-					name: "Milk",
-					quantity: 1,
-					isDone: false,
-				},
-			],
-			isDone: true,
-		},
-		{
-			id: "td03",
-			name: "Třetí úkolovník",
-			state: "active",
-			owner: "u3",
-			memberList: ["u1"],
-			itemList:[
-				{
-					id: "5",
-					name: "Eggs",
-					quantity: 12,
-					isDone: false,
-				},
-				{
-					id: "4",
-					name: "Bread",
-					quantity: 2,
-					isDone: true,
-				},
-			],
-			isDone: false,
-		},
-		{
-			id: "td04",
-			name: "čtvrtý úkolovník",
-			state: "archived",
-			owner: "u1",
-			memberList: [],
-			itemList:[
-				{
-					id: "1",
-					name: "Apples",
-					quantity: 5,
-					isDone: false,
-				},
-			],
-			isDone: true,
-		},
-	]);
-
 	// items in the opened shopping list
 	const currentItems = openedItemListDetail.itemList
-
-	const userList = [
-		{ id: "u1", name: "vochomůrka", profilePicUrl: "https://cdn.myanimelist.net/r/84x124/images/characters/9/131317.webp?s=d4b03c7291407bde303bc0758047f6bd" },
-		{ id: "u2", name: "křemílek", profilePicUrl: "https://cdn.myanimelist.net/r/84x124/images/characters/7/284129.webp?s=a8998bf668767de58b33740886ca571c" },
-		{ id: "u3", name: "rákosníček", profilePicUrl: "https://cdn.myanimelist.net/r/84x124/images/characters/9/105421.webp?s=269ff1b2bb9abe3ac1bc443d3a76e863"},
-	];
 
 	useEffect(() => {
 		// Testing
@@ -345,36 +267,8 @@ const ShoppingListDetail = () => {
 						))}
 					</MenuContent>
 				</MenuRoot>
-				{/* <MenuRoot>
-					<MenuTrigger asChild>
-						<Button variant="outline" size="sm">
-							<Text color={"red.500"}>Click me</Text> to change shopping list
-						</Button>
-					</MenuTrigger>
-					<MenuContent>
-						{shoppingList.map((item, index) => (
-							<MenuItem
-								value={item.id}
-								key={item.id}
-								bgColor={
-									openedItemListDetail && openedItemListDetail.id === item.id
-										? "green.500"
-										: "white"
-								}
-								color={
-									openedItemListDetail && openedItemListDetail.id === item.id
-										? "white"
-										: "none"
-								}
-								onClick={() => handleListChange(index)}
-							>
-								{item.name}
-							</MenuItem>
-						))}
-					</MenuContent>
-				</MenuRoot> */}
-			</Flex>
 
+			</Flex>
 			<Flex
 				width={"75%"}
 				minW={"380px"}
