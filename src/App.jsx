@@ -65,7 +65,7 @@ const App = () => {
 	}, []);
 
 	// add shopping list
-	const handleAddShoppingList = (inputs, itemInputs) => {
+	const handleAddShoppingList = (inputs, itemFromInputs) => {
 
 		if (inputs.listName !== "") {
 			const newShoppingList = {
@@ -78,12 +78,12 @@ const App = () => {
 				isDone: false,
 			};
 
-			if(itemInputs){
-				itemInputs.forEach(item => {
+			if(itemFromInputs){
+				itemFromInputs.forEach(item => {
 					const newItem = {
 						id: item.id,
 						name: item.itemName,
-						quantity: item.itemQuantity,
+						quantity: item.quantity,
 						isDone: false,
 					}
 					newShoppingList.itemList.push(newItem);
@@ -101,18 +101,18 @@ const App = () => {
 	const handleAddItem = (itemId) =>{
 		const item = inputs.itemList.find((item) => item.id === itemId)
 		const itemName = item ? item.itemName : null
-		const itemQuantity = item ? item.quantity : null
+		const itemQuantity = item.quantity
 
 		const newItem = {
 			id: itemId,
-			name: itemName,
+			itemName: itemName,
 			quantity: itemQuantity,
 			isDone: false,
 			// append item to items array that will be later pushed into itemList array in shoppingList
 		}
 		setItemsFromInputs((prevItems) => [...prevItems, newItem])
 	}
-	console.log(itemsFromInputs)
+
 
 	
 	// add user
@@ -143,8 +143,9 @@ const App = () => {
 				item.id === id ? { ...item, [field]: value } : item
 			),
 		}));
-		console.log(inputs)
+
 	};
+	console.log(inputs)
 
 
 	// delete list - done

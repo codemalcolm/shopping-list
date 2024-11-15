@@ -30,7 +30,7 @@ const ShoppingListDetail = () => {
 	const { shoppingList,setShoppingList, userList } = useShoppingList();
 	const [showFinishedItems, setShowFinishedItems] = useState(false);
 	const [loggedUser, setLoggedUser] = useState(null);
-	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", memberList: [], itemList:[], isDone: false });
+	const [openedItemListDetail, setOpenedItemListDetail] = useState({ id: "", name: "", state: "", owner: "", memberList: [], itemList:[], isDone: false, isArchived: false,});
 	const [errorMessage, setErrorMessage] = useState("");
 	const { shoppingListId } = useParams();
 
@@ -42,8 +42,10 @@ const ShoppingListDetail = () => {
 
 	]);
 
+
 	// items in the opened shopping list
 	const currentItems = openedItemListDetail.itemList
+	console.log(currentItems)
 
 	useEffect(() => {
 		// Testing
