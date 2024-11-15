@@ -41,6 +41,7 @@ import { useShoppingList } from "./context/ShoppingListContext";
 const App = () => {
 	const navigate = useNavigate()
 	const { shoppingList,setShoppingList, userList } = useShoppingList();
+	const [showArchived, setShowArchived] = useState(false);
 	
 
 	const [inputs, setInputs] = useState({
@@ -163,6 +164,20 @@ const App = () => {
 		navigate(`/list-detail/${id}`);
 	};
 
+	const handleFilter = () => {
+		setShowArchived(!showArchived);
+	};
+
+	const handleArchiveList = (listId) => {
+		setShoppingList((prevLists) =>
+		  prevLists.map((list) =>
+			list.id === listId
+			  ? { ...list, isArchived: !list.isArchived } // Toggle the list's `isArchived` property
+			  : list
+		  )
+		);
+	  };
+
 	return (
 		<>
 			{/* Testing */}
@@ -202,7 +217,17 @@ const App = () => {
 						Shopping lists :
 					</Text>
 					<Flex gap={2}>
-						<Button borderRadius={"16px"}>Filter</Button>
+						<Button
+							width={"150px"}
+							px={"32px"}
+							bgColor={showArchived ? "green.500" : "white"}
+							color={showArchived ? "white" : "black"}
+							border={showArchived ? "none" : "1px solid black"}
+							borderRadius={"16px"}
+							onClick={() => handleFilter()}
+						>
+							{showArchived ? "Hide archived" : "Show archived"}
+						</Button>
 						<DialogRoot onOpenChange={() => {setFetchUsers(false), setAddItem(false)}}>
 							<DialogTrigger asChild>
 								<Button borderRadius={"16px"} px={"32px"}>
@@ -349,56 +374,71 @@ const App = () => {
 						</DialogRoot>
 					</Flex>
 				</Flex>
-				{shoppingList?.map((item) => (
-					item.memberList.includes(loggedUser?.id) || item.owner === loggedUser?.id ? (
-
+				{shoppingList
+				?.filter(
+					(item) =>
+					// Filter items where the logged user is either a member or the owner
+					(item.memberList.includes(loggedUser?.id) || item.owner === loggedUser?.id) &&
+					// Include archived items only if `showArchived` is true
+					(showArchived || !item.isArchived)
+				)
+				.map((item) => (
 					<Box key={item.id} border={"1px solid black"} px={"32px"} py={"32px"}>
-						<Flex justifyContent={"space-between"} alignItems={"center"}>
-							<Flex gap={4} alignItems={"center"}>
-								<Checkbox
-									size="md"
-									colorPalette="green"
-									checked={item.isDone}
-								/>
-								<Text>{item.name}</Text>
-							</Flex>
-							<Flex gap={4} alignItems={"center"}>
-								<Button onClick={()=> handleShowListDetail(item.id) } variant="ghost" p={0} m={0}>
-									<Image w="32px" h="32px" objectFit="cover" src={showIcon} />
-								</Button>
-								{loggedUser && (
-									<>
-										<Image
-											w="36px"
-											h="32px"
-											display={loggedUser?.id === item.owner ? "block" : "none"}
-											objectFit="cover"
-											cursor="pointer"
-											src={saveIcon}
-										/>
-										<Image
-											w="38px"
-											h="32px"
-											display={loggedUser?.id === item.owner ? "block" : "none"}
-											objectFit="cover"
-											cursor="pointer"
-											src={editIcon}
-										/>
-										<Image
-											w="30px"
-											h="30px"
-											display={loggedUser?.id === item.owner ? "block" : "none"}
-											objectFit="cover"
-											cursor="pointer"
-											src={deleteIcon}
-											onClick={() => {handleDeleteList(item.id)}}
-										/>
-									</>
-								)}
-							</Flex>
+					<Flex justifyContent={"space-between"} alignItems={"center"}>
+						<Flex gap={4} alignItems={"center"}>
+						<Checkbox
+							size="md"
+							colorPalette="green"
+							checked={item.isDone}
+						/>
+						<Text>{item.name}</Text>
 						</Flex>
+						<Flex gap={4} alignItems={"center"}>
+						<Button
+							onClick={() => handleShowListDetail(item.id)}
+							variant="ghost"
+							p={0}
+							m={0}
+						>
+							<Image w="32px" h="32px" objectFit="cover" src={showIcon} />
+						</Button>
+						{loggedUser && (
+							<>
+							<Image
+								w="36px"
+								h="32px"
+								display={loggedUser?.id === item.owner ? "block" : "none"}
+								objectFit="cover"
+								cursor="pointer"
+								src={saveIcon}
+								bg={item.isArchived ? "green.500" : "none"}
+								onClick={()=>{handleArchiveList(item.id)}}
+								borderRadius={"full"}
+							/>
+							<Image
+								w="38px"
+								h="32px"
+								display={loggedUser?.id === item.owner ? "block" : "none"}
+								objectFit="cover"
+								cursor="pointer"
+								src={editIcon}
+							/>
+							<Image
+								w="30px"
+								h="30px"
+								display={loggedUser?.id === item.owner ? "block" : "none"}
+								objectFit="cover"
+								cursor="pointer"
+								src={deleteIcon}
+								onClick={() => {
+								handleDeleteList(item.id);
+								}}
+							/>
+							</>
+						)}
+						</Flex>
+					</Flex>
 					</Box>
-					) : null
 				))}
 			</Flex>
 		</>
