@@ -34,18 +34,8 @@ const ShoppingListDetail = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 	const { shoppingListId } = useParams();
 
-	const [items, setItems] = useState([
-
-
-		// removal in progress
-
-
-	]);
-
-
 	// items in the opened shopping list
 	const currentItems = openedItemListDetail.itemList
-	console.log(currentItems)
 
 	useEffect(() => {
 		// Testing
@@ -158,8 +148,6 @@ const ShoppingListDetail = () => {
 			itemList: prevDetail.itemList.filter((item) => item.id !== itemId),
 		}));
 	};
-
-	console.log(currentItems);
 
 	// item finish - done
 	const handleFinishItem = (itemId) => {
@@ -328,7 +316,7 @@ const ShoppingListDetail = () => {
 								onClick={() => {handleEdit()}}
 							/>
 						</Flex>
-						<Link href="/">
+						<Box onClick={()=> navigate("/")}>
 							<Image
 								w="38px"
 								h="32px"
@@ -336,7 +324,7 @@ const ShoppingListDetail = () => {
 								cursor="pointer"
 								src={closeIcon}
 							/>
-						</Link>
+						</Box>
 					</Flex>
 
 					{!errorMessage && openedItemListDetail && (
@@ -444,9 +432,9 @@ const ShoppingListDetail = () => {
 							<Flex flexDirection={"column"} gap={4}>
 								{userList
 								.filter((user) => 
-									loggedUser?.id === currentList?.owner || // owner sees all users in the app
+									loggedUser?.id === currentList?.owner ||	 // owner sees all users in the app
 									currentList?.memberList.includes(user.id) || // member sees only members
-									user.id === currentList?.owner // members see owner
+									user.id === currentList?.owner 				 // members see owner
 								)
 								.map((user) => {
 									const isAdded = currentList?.memberList.includes(user.id);

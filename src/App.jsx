@@ -95,7 +95,6 @@ const App = () => {
 
 			return;
 		}
-		console.log("Something went wrong");
 	};
 
 	// add item
@@ -114,11 +113,12 @@ const App = () => {
 		setItemsFromInputs((prevItems) => [...prevItems, newItem])
 	}
 
-
-	
 	// add user
-	const handleAddUser = () => {
-		setFetchUsers(!fetchUsers)
+	const handleAddUser = (userId) => {
+		setInputs(prevInputs =>({
+			...prevInputs,
+			membersList: [...prevInputs.membersList, userId]
+		}))
 	};
 
 	// add field input 
@@ -176,7 +176,16 @@ const App = () => {
 			  : list
 		  )
 		);
-	  };
+	};
+
+	const resetInputs = () =>{
+		setInputs({
+			listName: "",
+			membersList: [],
+			itemList:[]
+		})
+		setItemsFromInputs([])
+	}
 
 	return (
 		<>
@@ -228,7 +237,7 @@ const App = () => {
 						>
 							{showArchived ? "Hide archived" : "Show archived"}
 						</Button>
-						<DialogRoot onOpenChange={() => {setFetchUsers(false), setAddItem(false)}}>
+						<DialogRoot onOpenChange={() => {setFetchUsers(false), setAddItem(false)}} onExitComplete={() => resetInputs()}>
 							<DialogTrigger asChild>
 								<Button borderRadius={"16px"} px={"32px"}>
 									Add shopping list
@@ -278,8 +287,10 @@ const App = () => {
 														gap={2}
 													>
 													{fetchUsers && 
-													userList.map((user) =>(
-														user.id !== loggedUser.id ? (
+													userList.map((user) =>{
+														const isAdded = inputs.membersList.includes(user.id)
+														if(user.id === loggedUser.id) return null // Logged user not showing in the list
+														return(
 															<Flex key={user.id} justifyContent={"space-between"}>
 																<Flex gap={4} alignItems={"center"}>
 																<Avatar src={user.profilePicUrl} name={user.name} />
@@ -287,19 +298,16 @@ const App = () => {
 																</Flex>
 																{/* Adds user */}
 																<Button
-																bgColor={
-																	// isAdded ? "red.500" : 
-																	"green.500"}
-																onClick={() => {
-																	handleAddUser(user.id);
-																}}
+																disabled={ isAdded ? true : false }
+																bgColor={ isAdded ? "green.500" : "none"}
+																onClick={() => { handleAddUser(user.id); }}
 																>
-																{"Add User"}
+																{isAdded ? "User Added" : "Add User"}
 																</Button>
 
 															</Flex>
-														): null
-													))}
+														)
+													})}
 													</Flex>
 												</Collapsible.Content>
 											</Flex>
@@ -377,20 +385,16 @@ const App = () => {
 				{shoppingList
 				?.filter(
 					(item) =>
-					// Filter items where the logged user is either a member or the owner
+					// User must be a member or the owner
 					(item.memberList.includes(loggedUser?.id) || item.owner === loggedUser?.id) &&
-					// Include archived items only if `showArchived` is true
-					(showArchived || !item.isArchived)
+					// Archived lists are shown only to owners of archived lists if showArchived is true
+					((!item.isArchived && !showArchived) || (item.isArchived && loggedUser?.id === item.owner && showArchived))
 				)
 				.map((item) => (
 					<Box key={item.id} border={"1px solid black"} px={"32px"} py={"32px"}>
 					<Flex justifyContent={"space-between"} alignItems={"center"}>
 						<Flex gap={4} alignItems={"center"}>
-						<Checkbox
-							size="md"
-							colorPalette="green"
-							checked={item.isDone}
-						/>
+						<Checkbox size="md" colorPalette="green" checked={item.isDone} />
 						<Text>{item.name}</Text>
 						</Flex>
 						<Flex gap={4} alignItems={"center"}>
@@ -412,16 +416,10 @@ const App = () => {
 								cursor="pointer"
 								src={saveIcon}
 								bg={item.isArchived ? "green.500" : "none"}
-								onClick={()=>{handleArchiveList(item.id)}}
+								onClick={() => {
+								handleArchiveList(item.id);
+								}}
 								borderRadius={"full"}
-							/>
-							<Image
-								w="38px"
-								h="32px"
-								display={loggedUser?.id === item.owner ? "block" : "none"}
-								objectFit="cover"
-								cursor="pointer"
-								src={editIcon}
 							/>
 							<Image
 								w="30px"
