@@ -1,9 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create context
 const ShoppingListContext = createContext();
 
-// Create a provider component
 export const ShoppingListProvider = ({ children }) => {
     const [shoppingList, setShoppingList] = useState([
             {
@@ -38,7 +36,7 @@ export const ShoppingListProvider = ({ children }) => {
                     },
                 ],
                 isDone: true,
-                isArchived:true
+                isArchived:false
             },
             {
                 id: "td03",
@@ -78,7 +76,7 @@ export const ShoppingListProvider = ({ children }) => {
                     },
                 ],
                 isDone: true,
-                isArchived:false
+                isArchived:true
             },
     ]);
 
@@ -95,5 +93,4 @@ export const ShoppingListProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use the ShoppingList context
 export const useShoppingList = () => useContext(ShoppingListContext);
