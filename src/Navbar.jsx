@@ -1,6 +1,6 @@
-
 import {
 	Box,
+	Button,
 	Container,
 	Flex,
 	Image,
@@ -8,13 +8,14 @@ import {
 	Link,
 	Text,
 } from "@chakra-ui/react";
-import {Avatar} from "./components/ui/avatar"
-import React from "react";
-import HamburgerIcon from "./assets/icons/burger-icon.svg"
-// import ProfileIcon from "../icons/profile-icon.svg";
+import { Avatar } from "./components/ui/avatar";
+import React, { useState } from "react";
+import HamburgerIcon from "./assets/icons/burger-icon.svg";
+import moonIcon from "./assets/icons/moon-icon.svg";
+import sunIcon from "./assets/icons/sun-icon.svg";
 
 const Navbar = () => {
-
+	const [isDarkMode, setIsDarkMode] = useState(false);
 	return (
 		<Box
 			px={{ base: "32px", sm: "48px" }}
@@ -30,6 +31,16 @@ const Navbar = () => {
 					alignItems={"center"}
 					height={"32px"}
 				>
+					<Button
+						p={0}
+						w={"40px"}
+						h={"40px"}
+						variant="ghost"
+						onClick={() => setIsDarkMode(!isDarkMode)}
+						borderRadius={"full"}
+					>
+						<Image objectFit="cover" src={isDarkMode ? sunIcon : moonIcon}/>
+					</Button>
 					<Avatar size="xl" name="Sage" src="https://bit.ly/sage-adebayo" />
 				</Flex>
 				<Box gap={16} display={{ base: "block", sm: "none" }}>
@@ -41,4 +52,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
