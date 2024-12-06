@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { Checkbox } from "./components/ui/checkbox";
 import deleteIcon from "./assets/icons/delete-icon.svg";
+import { Trash2 } from "lucide-react";
 
 const ShoppingListItem = (props) => {
   const { name, quantity,isDone, onFinish, onDelete } = props;
@@ -11,7 +12,7 @@ const ShoppingListItem = (props) => {
 	return (
 		<Box
 			w={"100%"}
-			bgColor={"gray.200"}
+			bgColor={{base:"gray.200", _dark:"gray.600"}}
 			px={"24px"}
 			py={"24px"}
 			borderRadius={"4px"}
@@ -22,19 +23,19 @@ const ShoppingListItem = (props) => {
 					<Text fontWeight={"500"}>{quantity}</Text>
 				</Flex>
 				<Flex alignItems={"center"} gap={2}>
-					<Image
-						w="20px"
-						h="20px"
+					<Box
 						objectFit="cover"
 						cursor="pointer"
-						src={deleteIcon}
 						onClick={onDelete}
-					/>
+						color="red"
+					>
+						<Trash2/>
+					</Box>
 					<Checkbox
 						size="md"
 						variant={"solid"}
 						colorPalette="green"
-						border="solid 1px black"
+						border="solid 1px gray"
 						borderRadius="4px"
             			defaultChecked={isDone}
 						onChange={onFinish}

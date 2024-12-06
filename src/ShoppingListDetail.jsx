@@ -25,6 +25,7 @@ import {
 	DialogActionTrigger,
   } from "./components/ui/dialog"
 import { useShoppingList } from "./context/ShoppingListContext";
+import { Delete, PencilLine, Trash2, X } from "lucide-react";
 
 const ShoppingListDetail = () => {
 	const { shoppingList,setShoppingList, userList } = useShoppingList();
@@ -230,7 +231,7 @@ const ShoppingListDetail = () => {
 	return (
 		<>
 
-			<Flex mb={"64px"} gap={4}>
+			<Flex mb={"64px"} gap={4} >
 				<MenuRoot>
 					<MenuTrigger asChild>
 						<Button variant="outline" size="sm">
@@ -267,6 +268,7 @@ const ShoppingListDetail = () => {
 				bgColor={"gray.100"}
 				mx={"auto"}
 				borderRadius={"16px"}
+				bg={{base:"gray.100", _dark:"gray.800"}}
 			>
 				{errorMessage && (
 					<Flex width="100%" justifyContent={"center"} alignItems={"center"}>
@@ -276,7 +278,7 @@ const ShoppingListDetail = () => {
 				)}
 				{!errorMessage && (
 					
-				<Flex padding={"18px"} width={"100%"} flexDirection={"column"}>
+				<Flex padding={"18px"} width={"100%"} flexDirection={"column"} >
 
 					<Flex justifyContent={"space-between"}>
 						<Flex gap={2}>
@@ -285,15 +287,13 @@ const ShoppingListDetail = () => {
 									<>
 										{loggedUser?.id === openedItemListDetail?.owner 
 										? (
-											<Image
-												w="28px"
-												h="28px"
-												objectFit="cover"
-												cursor="pointer"
-												src={deleteIcon}
+											<Box
+												cursor="pointer"t
 												onClick={()=> handleDeleteList(openedItemListDetail.id)}
-
-											/>
+												color="red"
+											>
+												<Trash2/>
+											</Box>
 										) : (
 											<Text cursor="pointer" color={"red.500"} onClick={() =>{handleLeave()}}>
 												Leave shopping list
@@ -302,28 +302,20 @@ const ShoppingListDetail = () => {
 									</>
 								)}
 							</Box>
-							<Image
-								w="38px"
-								h="32px"
+							<Box
 								display={
 									loggedUser?.id === openedItemListDetail?.owner
 										? "block"
 										: "none"
 								}
-								objectFit="cover"
 								cursor="pointer"
-								src={editIcon}
 								onClick={() => {handleEdit()}}
-							/>
+							>
+								<PencilLine />
+							</Box>
 						</Flex>
-						<Box onClick={()=> navigate("/")}>
-							<Image
-								w="38px"
-								h="32px"
-								objectFit="cover"
-								cursor="pointer"
-								src={closeIcon}
-							/>
+						<Box onClick={()=> navigate("/")} cursor={"pointer"}>
+							<X/>
 						</Box>
 					</Flex>
 
