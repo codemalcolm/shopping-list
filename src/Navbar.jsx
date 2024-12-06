@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import HamburgerIcon from "./assets/icons/burger-icon.svg";
 import moonIcon from "./assets/icons/moon-icon.svg";
 import sunIcon from "./assets/icons/sun-icon.svg";
+import { ColorModeButton } from "./components/ui/color-mode";
 
 const Navbar = () => {
 	const [isDarkMode, setIsDarkMode] = useState(false);
@@ -20,8 +21,10 @@ const Navbar = () => {
 		<Box
 			px={{ base: "32px", sm: "48px" }}
 			py={{ base: "32px", sm: "32px" }}
-			border={"1px solid black"}
 			w={"full"}
+			bgColor={{base:"white", _dark:"gray.900"}}
+			borderBottom={{base:"1px solid gray", _dark:"1px solid white"}}
+			color={"text"}
 		>
 			<Flex justifyContent={"space-between"} alignItems={"center"} gap={"48px"}>
 				<Link href="/">Shopping List</Link>
@@ -31,16 +34,7 @@ const Navbar = () => {
 					alignItems={"center"}
 					height={"32px"}
 				>
-					<Button
-						p={0}
-						w={"40px"}
-						h={"40px"}
-						variant="ghost"
-						onClick={() => setIsDarkMode(!isDarkMode)}
-						borderRadius={"full"}
-					>
-						<Image objectFit="cover" src={isDarkMode ? sunIcon : moonIcon}/>
-					</Button>
+					<ColorModeButton borderRadius={"full"}/>
 					<Avatar size="xl" name="Sage" src="https://bit.ly/sage-adebayo" />
 				</Flex>
 				<Box gap={16} display={{ base: "block", sm: "none" }}>
