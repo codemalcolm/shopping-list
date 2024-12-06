@@ -242,12 +242,15 @@ const App = () => {
 							<DialogTrigger asChild>
 								<Button
 									borderRadius={"16px"}
-									px={"32px"}
+									px={{ sm: "32px", base: "none" }}
 									bgColor={{ base: "gray.900" }}
 									color={{ base: "white" }}
 									border={{ base: "1px solid black", _dark: "1px solid white" }}
 								>
-									Add shopping list
+									<Text display={{ sm: "block", base: "none" }}>
+										Add shopping list
+									</Text>
+									<CirclePlus/>
 								</Button>
 							</DialogTrigger>
 
@@ -487,11 +490,10 @@ const App = () => {
 												<Bookmark
 													fill={item.isArchived ? "#90ee90" : "transparent"}
 													stroke={
-													item.isArchived
-													? "green.500"
-													: useColorModeValue("black", "white") // Dynamically resolves based on light or dark mode
+														item.isArchived
+															? "green.500"
+															: useColorModeValue("black", "white") // Dynamically resolves based on light or dark mode
 													}
-
 												/>
 											</Box>
 											<Box
