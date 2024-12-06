@@ -198,7 +198,11 @@ const App = () => {
 							<MenuItem
 								value={user.id}
 								key={user.id}
-								bgColor={loggedUser?.id === user.id ? "green.500" : "white"}
+								bgColor={
+									loggedUser?.id === user.id
+										? "green.500"
+										: useColorModeValue("white", "black")
+								}
 								color={loggedUser?.id === user.id ? "white" : "none"}
 								onClick={() => {
 									handleUserChange(index);
@@ -250,7 +254,7 @@ const App = () => {
 									<Text display={{ sm: "block", base: "none" }}>
 										Add shopping list
 									</Text>
-									<CirclePlus/>
+									<CirclePlus />
 								</Button>
 							</DialogTrigger>
 
@@ -492,7 +496,7 @@ const App = () => {
 													stroke={
 														item.isArchived
 															? "green.500"
-															: useColorModeValue("black", "white") // Dynamically resolves based on light or dark mode
+															: useColorModeValue("black", "white")
 													}
 												/>
 											</Box>
