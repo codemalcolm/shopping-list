@@ -38,6 +38,7 @@ import { Avatar } from "./components/ui/avatar";
 import { useNavigate } from "react-router";
 import { useShoppingList } from "./context/ShoppingListContext";
 import { Bookmark, CirclePlus, Eye, Trash2 } from "lucide-react";
+import { useColorModeValue } from "./components/ui/color-mode";
 
 const App = () => {
 	const navigate = useNavigate();
@@ -485,7 +486,12 @@ const App = () => {
 											>
 												<Bookmark
 													fill={item.isArchived ? "#90ee90" : "transparent"}
-													stroke={item.isArchived ? "green.500" : "white"}
+													stroke={
+													item.isArchived
+													? "green.500"
+													: useColorModeValue("black", "white") // Dynamically resolves based on light or dark mode
+													}
+
 												/>
 											</Box>
 											<Box
