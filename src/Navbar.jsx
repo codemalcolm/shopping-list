@@ -29,6 +29,15 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "./components/ui/drawer";
+import englishFlag from "./assets/icons/english-flag-icon.svg"
+import czechFlag from "./assets/icons/czech-republic-flag-icon.svg"
+import {
+  MenuContent,
+  MenuItem,
+  MenuItemCommand,
+  MenuRoot,
+  MenuTrigger,
+} from "./components/ui/menu"
 
 const Navbar = () => {
 	const [open, setOpen] = useState(false);
@@ -49,8 +58,26 @@ const Navbar = () => {
 					alignItems={"center"}
 					height={"32px"}
 				>
-					<ColorModeButton borderRadius={"full"} />
-					<Avatar size="xl" name="Sage" src="https://bit.ly/sage-adebayo" />
+				<MenuRoot>
+					<MenuTrigger asChild>
+						<Button variant="outline" size="xs">
+						LANG
+						</Button>
+					</MenuTrigger>
+					<MenuContent minWidth={"55px"}>
+						<Flex justifyConten="center" flexDir="column" alignItems={"center"}>
+							<MenuItem value="new-txt-a" >
+							ENG <Image src={englishFlag} width={"25px"}/>
+							</MenuItem>
+
+							<MenuItem value="new-txt-">
+							CZE <Image src={czechFlag} width={"25px"}/>
+							</MenuItem>
+						</Flex>
+					</MenuContent>
+				</MenuRoot>
+				<ColorModeButton borderRadius={"full"} />
+				<Avatar size="xl" name="Sage" src="https://bit.ly/sage-adebayo" />
 				</Flex>
 				<DrawerRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
 					<DrawerBackdrop />
