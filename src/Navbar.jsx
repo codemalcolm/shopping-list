@@ -133,7 +133,38 @@ const Navbar = () => {
 									justifyContent={"space-between"}
 								>
 									<Text>Language</Text>
-									Language icon
+									<Flex
+										justifyConten="center"
+										flexDir="column"
+										alignItems={"center"}
+										zIndex={"1009"}
+									>
+										{Object.keys(lngs).map((lng, index) => (
+											<Flex
+												key={index}
+												value="new-txt-a"
+												type="submit"
+												onClick={() => i18n.changeLanguage(lng)}
+												fontWeight={
+													i18n.resolvedLanguage === lng ? "bold" : "normal"
+												}
+												backgroundColor={
+													i18n.resolvedLanguage === lng
+														? "green.500"
+														: "default"
+												}
+												justifyContent={"center"}
+												alignItems={"center"}
+												width={"auto"}
+												px={"20px"}
+												py={"12px"}
+												gap={"8px"}
+											>
+												{lngs[lng].nativeName}
+												<Image src={lngs[lng].flag} width={"25px"} />
+											</Flex>
+										))}
+									</Flex>
 								</HStack>
 							</VStack>
 						</DrawerBody>
