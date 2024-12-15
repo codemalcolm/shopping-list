@@ -44,8 +44,11 @@ import {
 	Users,
 	X,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ShoppingListDetail = () => {
+	const { t } = useTranslation();
+
 	const { shoppingList, setShoppingList, userList } = useShoppingList();
 	const [showFinishedItems, setShowFinishedItems] = useState(false);
 	const [loggedUser, setLoggedUser] = useState(null);
@@ -144,8 +147,8 @@ const ShoppingListDetail = () => {
 
 	// item add - done
 	const handleAddItem = () => {
-		const itemName = prompt("Enter item name:");
-		const itemQuantity = prompt("Enter item quantity:");
+		const itemName = prompt(t("titles.detailPage.enterItemName"));
+		const itemQuantity = prompt(t("titles.detailPage.enterItemQuantity"));
 
 		if (itemName && itemQuantity) {
 			const newItem = {
@@ -344,7 +347,7 @@ const ShoppingListDetail = () => {
 														handleLeave();
 													}}
 												>
-													Leave shopping list
+													{t("buttonTexts.leave")}
 												</Text>
 											)}
 										</>
@@ -389,11 +392,11 @@ const ShoppingListDetail = () => {
 										my={"auto"}
 										fontSize={"24px"}
 									>
-										Items :
+										{t("titles.detailPage.items")} :
 									</Text>
 									<Flex gap={2} alignItems={"center"}>
 										<Button
-											width={"150px"}
+											width={"auto"}
 											px={"32px"}
 											bgColor={showFinishedItems ? "green.500" : "white"}
 											color={showFinishedItems ? "white" : "black"}
@@ -402,10 +405,11 @@ const ShoppingListDetail = () => {
 											onClick={() => handleFilter()}
 											display={{ base: "none", sm: "block" }}
 										>
-											{showFinishedItems ? "Hide finished" : "Show finished"}
+											{showFinishedItems
+												? t("buttonTexts.showFinishedOff")
+												: t("buttonTexts.showFinished")}
 										</Button>
 										<Button
-
 											bgColor={showFinishedItems ? "green.500" : "white"}
 											color={showFinishedItems ? "white" : "black"}
 											border={showFinishedItems ? "none" : "1px solid black"}
@@ -413,7 +417,7 @@ const ShoppingListDetail = () => {
 											onClick={() => handleFilter()}
 											display={{ base: "block", sm: "none" }}
 										>
-											{showFinishedItems ? <List/> : <ListChecks/>}
+											{showFinishedItems ? <List /> : <ListChecks />}
 										</Button>
 										<Button
 											px={{ base: "0", sm: "32px" }}
@@ -423,7 +427,7 @@ const ShoppingListDetail = () => {
 											}}
 										>
 											<Text display={{ base: "none", sm: "block" }}>
-												Add Item
+												{t("buttonTexts.addItem")}
 											</Text>
 											<CirclePlus />
 										</Button>
@@ -436,8 +440,12 @@ const ShoppingListDetail = () => {
 										gap="48px"
 										w="100%"
 									>
-										<Text fontWeight={500}>Item name</Text>
-										<Text fontWeight={500}>Quantity</Text>
+										<Text fontWeight={500}>
+											{t("titles.detailPage.itemName")}
+										</Text>
+										<Text fontWeight={500}>
+											{t("titles.detailPage.quantity")}
+										</Text>
 									</Flex>
 									{currentItems
 										?.filter((item) => showFinishedItems || !item.isDone)
@@ -464,7 +472,7 @@ const ShoppingListDetail = () => {
 						>
 							<Flex gap={4} alignItems={"center"}>
 								<Text fontSize={"1.2vw"} fontWeight={500}>
-									Users in this list :
+									{t("titles.detailPage.usersInList")} :
 								</Text>
 								<AvatarGroup size="lg">
 									{currentListMembers.map((user) => {
@@ -497,8 +505,8 @@ const ShoppingListDetail = () => {
 										display={{ base: "none", sm: "block" }}
 									>
 										{loggedUser?.id === currentList?.owner
-											? "Add user to shopping list"
-											: "View Members"}
+											? t("buttonTexts.addUserOwner")
+											: t("buttonTexts.addUserMember")}
 									</Button>
 								</DialogTrigger>
 								<DialogTrigger asChild>
@@ -518,7 +526,7 @@ const ShoppingListDetail = () => {
 
 								<DialogContent>
 									<DialogHeader>
-										<DialogTitle>Users</DialogTitle>
+										<DialogTitle>{t("titles.detailPage.users")}</DialogTitle>
 									</DialogHeader>
 
 									<DialogBody>
@@ -557,7 +565,7 @@ const ShoppingListDetail = () => {
 																	color="orange.400"
 																	alignSelf="center"
 																>
-																	Owner
+																	{t("titles.detailPage.owner")}
 																</Text>
 															) : (
 																loggedUser?.id === currentList?.owner && ( // add/remove buttons for owner
@@ -571,7 +579,7 @@ const ShoppingListDetail = () => {
 																			}
 																		}}
 																	>
-																		{isAdded ? "Remove User" : "Add User"}
+																		{isAdded ? t("buttonTexts.removeUser") : t("buttonTexts.addUser")}
 																	</Button>
 																)
 															)}
