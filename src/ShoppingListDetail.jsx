@@ -45,6 +45,11 @@ import {
 	X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import {
+	ProgressCircleRing,
+	ProgressCircleRoot,
+	ProgressCircleValueText,
+} from "./components/ui/progress-circle";
 
 const ShoppingListDetail = () => {
 	const { t } = useTranslation();
@@ -67,6 +72,17 @@ const ShoppingListDetail = () => {
 
 	// items in the opened shopping list
 	const currentItems = openedItemListDetail.itemList;
+
+	//calculate done percentage
+	const calculateDonePercentage = (items) => {
+		if (!items || items.length === 0) return 0; // Avoid division by zero
+
+		const totalItems = items.length;
+		const doneItems = items.filter((item) => item.isDone).length;
+
+		return Math.round((doneItems / totalItems) * 100);
+	};
+	const donePercentage = calculateDonePercentage(currentItems);
 
 	useEffect(() => {
 		// Testing
@@ -304,7 +320,7 @@ const ShoppingListDetail = () => {
 				</MenuRoot>
 			</Flex>
 			<Flex
-				width={"75%"}
+				width={"100%"}
 				minW={"380px"}
 				minH={"650px"}
 				h="100%"
@@ -386,14 +402,14 @@ const ShoppingListDetail = () => {
 									{openedItemListDetail.name}
 								</Text>
 								<Flex justifyContent={"space-between"}>
-									<Text
-										lineHeight={"24px"}
-										height={"24px"}
-										my={"auto"}
-										fontSize={"24px"}
+									<ProgressCircleRoot
+										value={donePercentage}
+										size={"md"}
+										colorPalette={"green"}
 									>
-										{t("titles.detailPage.items")} :
-									</Text>
+										<ProgressCircleValueText />
+										<ProgressCircleRing />
+									</ProgressCircleRoot>
 									<Flex gap={2} alignItems={"center"}>
 										<Button
 											width={"auto"}
@@ -434,6 +450,14 @@ const ShoppingListDetail = () => {
 									</Flex>
 								</Flex>
 								<Flex flexDirection={"column"} gap={4} mt={"16px"}>
+									<Text
+										lineHeight={"24px"}
+										height={"24px"}
+										my={"auto"}
+										fontSize={"24px"}
+									>
+										{t("titles.detailPage.items")} :
+									</Text>
 									<Flex
 										px={"24px"}
 										justifyContent={"start"}
@@ -579,7 +603,9 @@ const ShoppingListDetail = () => {
 																			}
 																		}}
 																	>
-																		{isAdded ? t("buttonTexts.removeUser") : t("buttonTexts.addUser")}
+																		{isAdded
+																			? t("buttonTexts.removeUser")
+																			: t("buttonTexts.addUser")}
 																	</Button>
 																)
 															)}
