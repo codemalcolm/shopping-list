@@ -9,6 +9,7 @@ import ShoppingListDetail from "./ShoppingListDetail.jsx";
 import { ShoppingListProvider } from "./context/ShoppingListContext.jsx";
 import theme from "../theme.js";
 import { ColorModeProvider } from "./components/ui/color-mode.jsx";
+import "./i18n.js"
 
 const router = createBrowserRouter([
 	{
