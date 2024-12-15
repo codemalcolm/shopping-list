@@ -41,6 +41,7 @@ import { Bookmark, CirclePlus, Eye, Trash2, UserRoundPlus } from "lucide-react";
 import { useColorModeValue } from "./components/ui/color-mode";
 import { useTranslation } from "react-i18next";
 
+
 const App = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
@@ -63,6 +64,7 @@ const App = () => {
 	const handleUserChange = (index) => {
 		setlLoggedUser(userList[index]);
 	};
+
 
 	useEffect(() => {
 		setlLoggedUser(userList[0]);
@@ -225,7 +227,7 @@ const App = () => {
 					px={"16px"}
 				>
 					<Text fontSize={"18px"} fontWeight={500}>
-					{t("titles.mainPage")} :
+						{t("titles.mainPage")} :
 					</Text>
 					<Flex gap={2}>
 						<Button
@@ -237,7 +239,9 @@ const App = () => {
 							borderRadius={"16px"}
 							onClick={() => handleFilter()}
 						>
-							{showArchived ? t("buttonTexts.archiveButtonOff") : t("buttonTexts.archiveButton")}
+							{showArchived
+								? t("buttonTexts.archiveButtonOff")
+								: t("buttonTexts.archiveButton")}
 						</Button>
 						<DialogRoot
 							onOpenChange={() => {
@@ -263,11 +267,17 @@ const App = () => {
 							{/* Create shopping list modal */}
 							<DialogContent>
 								<DialogHeader>
-									<DialogTitle>{t("buttonTexts.createShoppingList")}</DialogTitle>
+									<DialogTitle>
+										{t("buttonTexts.createShoppingList")}
+									</DialogTitle>
 								</DialogHeader>
 								<DialogBody>
 									<Flex gap={4} flexDirection={"column"} alignItems={"center"}>
-										<Field label={t("titles.detailPage.itemName")} required w="81%">
+										<Field
+											label={t("titles.detailPage.itemName")}
+											required
+											w="81%"
+										>
 											<Input
 												placeholder={t("placeholders.nameInput")}
 												onChange={(e) =>
@@ -333,7 +343,9 @@ const App = () => {
 																				handleAddUser(user.id);
 																			}}
 																		>
-																			{isAdded ? t("buttonTexts.userAdded") : t("buttonTexts.addUser")}
+																			{isAdded
+																				? t("buttonTexts.userAdded")
+																				: t("buttonTexts.addUser")}
 																		</Button>
 																	</Flex>
 																);
@@ -379,7 +391,10 @@ const App = () => {
 														</Button>
 														{inputs?.itemList?.map((item) => (
 															<Flex gap={4} alignItems={"end"} key={item.id}>
-																<Field label={t("titles.detailPage.itemName")} w={"35%"}>
+																<Field
+																	label={t("titles.detailPage.itemName")}
+																	w={"35%"}
+																>
 																	<Input
 																		onChange={(e) =>
 																			handleInputChange(
@@ -390,7 +405,10 @@ const App = () => {
 																		}
 																	/>
 																</Field>
-																<Field label={t("titles.detailPage.quantity")} w={"35%"}>
+																<Field
+																	label={t("titles.detailPage.quantity")}
+																	w={"35%"}
+																>
 																	<Input
 																		onChange={(e) =>
 																			handleInputChange(
@@ -461,12 +479,9 @@ const App = () => {
 						>
 							<Flex justifyContent={"space-between"} alignItems={"center"}>
 								<Flex gap={4} alignItems={"center"}>
-									<Checkbox
-										size="md"
-										colorPalette="green"
-										checked={item.isDone}
-									/>
 									<Text>{item.name}</Text>
+									<Box w="4px" h="4px" borderRadius="full" bg={{base :"gray.800", _dark:"gray.400"}} />
+									<Text fontSize={"10px"} fontWeight={600} color={{base :"gray.800", _dark:"gray.400"}}>{item.itemList.length} Items in list</Text>
 								</Flex>
 								<Flex gap={4} alignItems={"center"}>
 									<Box
