@@ -147,7 +147,7 @@ const ShoppingListDetail = () => {
 						: list
 				)
 			);
-			alert(`You have left the shopping list: ${openedItemListDetail.name}`);
+			alert(`${t("titles.detailPage.youHaveLeft")}: ${openedItemListDetail.name}`);
 			navigate("/");
 		}
 	};

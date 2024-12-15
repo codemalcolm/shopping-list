@@ -39,6 +39,7 @@ i18n
 					},
 					titles: {
 						mainPage: "Shopping Lists",
+						itemsInList: "Items in list",
 						detailPage: {
 							items: "Items",
 							quantity: "Quantity",
@@ -47,7 +48,8 @@ i18n
 							usersInList: "Users in this list",
 							owner: "Owner",
 							enterItemName: "Enter item name",
-							enterItemQuantity:"Enter item quantity"
+							enterItemQuantity:"Enter item quantity",
+							youHaveLeft: "You have left the shopping list"
 						},
 					},
 					placeholders:{
@@ -65,7 +67,7 @@ i18n
 						showFinishedOff: "Skrýt hotové",
 						addItem: "Přidat položku",
 						addUserOwner: "Přidat uživatele do seznamu",
-						addUserMember: "Přidat uživatele do seznamu",
+						addUserMember: "Zobrazit uživatele",
 						addUser: "Přidat",
 						addUserLong: "Přidat uživatele",
 						userAdded :"Přidán",
@@ -77,6 +79,7 @@ i18n
 					},
 					titles: {
 						mainPage: "Nákupní seznamy",
+						itemsInList: "Položky v seznamu",
 						detailPage: {
 							items: "Položky",
 							quantity: "Množství",
@@ -86,6 +89,7 @@ i18n
 							owner: "Vlastník",
 							enterItemName: "Zadej název položky",
 							enterItemQuantity:"Zadej množství položky",
+							youHaveLeft: "Opouštíš seznam"
 						},
 					},
 					placeholders:{
