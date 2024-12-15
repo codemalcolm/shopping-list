@@ -37,10 +37,12 @@ import { Field } from "./components/ui/field";
 import { Avatar } from "./components/ui/avatar";
 import { useNavigate } from "react-router";
 import { useShoppingList } from "./context/ShoppingListContext";
-import { Bookmark, CirclePlus, Eye, Trash2 } from "lucide-react";
+import { Bookmark, CirclePlus, Eye, Trash2, UserRoundPlus } from "lucide-react";
 import { useColorModeValue } from "./components/ui/color-mode";
+import { useTranslation } from "react-i18next";
 
 const App = () => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const { shoppingList, setShoppingList, userList } = useShoppingList();
 	const [showArchived, setShowArchived] = useState(false);
@@ -223,11 +225,11 @@ const App = () => {
 					px={"16px"}
 				>
 					<Text fontSize={"18px"} fontWeight={500}>
-						Shopping lists :
+					{t("titles.mainPage")} :
 					</Text>
 					<Flex gap={2}>
 						<Button
-							width={"150px"}
+							width={"auto"}
 							px={"32px"}
 							bgColor={showArchived ? "green.500" : "white"}
 							color={showArchived ? "white" : "black"}
@@ -235,7 +237,7 @@ const App = () => {
 							borderRadius={"16px"}
 							onClick={() => handleFilter()}
 						>
-							{showArchived ? "Hide archived" : "Show archived"}
+							{showArchived ? t("buttonTexts.archiveButtonOff") : t("buttonTexts.archiveButton")}
 						</Button>
 						<DialogRoot
 							onOpenChange={() => {
@@ -252,7 +254,7 @@ const App = () => {
 									border={{ base: "1px solid black", _dark: "1px solid white" }}
 								>
 									<Text display={{ sm: "block", base: "none" }}>
-										Add shopping list
+										{t("buttonTexts.createButton")}
 									</Text>
 									<CirclePlus />
 								</Button>
@@ -261,13 +263,13 @@ const App = () => {
 							{/* Create shopping list modal */}
 							<DialogContent>
 								<DialogHeader>
-									<DialogTitle>Create a Shopping list</DialogTitle>
+									<DialogTitle>{t("buttonTexts.createShoppingList")}</DialogTitle>
 								</DialogHeader>
 								<DialogBody>
 									<Flex gap={4} flexDirection={"column"} alignItems={"center"}>
-										<Field label="Name" required w="81%">
+										<Field label={t("titles.detailPage.itemName")} required w="81%">
 											<Input
-												placeholder="Enter shopping list name"
+												placeholder={t("placeholders.nameInput")}
 												onChange={(e) =>
 													setInputs({ ...inputs, listName: e.target.value })
 												}
@@ -283,8 +285,8 @@ const App = () => {
 															setFetchUsers(!fetchUsers);
 														}}
 													>
-														Add user
-														<Image w="22px" h="22px" src={addUserIcon} />
+														{t("buttonTexts.addUserLong")}
+														<UserRoundPlus />
 													</Button>
 												</Collapsible.Trigger>
 
@@ -331,7 +333,7 @@ const App = () => {
 																				handleAddUser(user.id);
 																			}}
 																		>
-																			{isAdded ? "User Added" : "Add User"}
+																			{isAdded ? t("buttonTexts.userAdded") : t("buttonTexts.addUser")}
 																		</Button>
 																	</Flex>
 																);
@@ -344,7 +346,7 @@ const App = () => {
 											<Flex flexDirection="column" alignItems="center" w="100%">
 												<Collapsible.Trigger>
 													<Button w={"375px"}>
-														Add items <CirclePlus />
+														{t("buttonTexts.addItem")} <CirclePlus />
 													</Button>
 												</Collapsible.Trigger>
 
@@ -377,7 +379,7 @@ const App = () => {
 														</Button>
 														{inputs?.itemList?.map((item) => (
 															<Flex gap={4} alignItems={"end"} key={item.id}>
-																<Field label="Item name" w={"35%"}>
+																<Field label={t("titles.detailPage.itemName")} w={"35%"}>
 																	<Input
 																		onChange={(e) =>
 																			handleInputChange(
@@ -388,7 +390,7 @@ const App = () => {
 																		}
 																	/>
 																</Field>
-																<Field label="Quantity" w={"35%"}>
+																<Field label={t("titles.detailPage.quantity")} w={"35%"}>
 																	<Input
 																		onChange={(e) =>
 																			handleInputChange(
@@ -405,7 +407,7 @@ const App = () => {
 																			<Button
 																				onClick={() => handleAddItem(item.id)}
 																			>
-																				Add item
+																				{t("buttonTexts.submit")}
 																			</Button>
 																		)}
 																</Box>
@@ -419,7 +421,7 @@ const App = () => {
 								</DialogBody>
 								<DialogFooter>
 									<DialogActionTrigger asChild>
-										<Button variant="outline">Cancel</Button>
+										<Button variant="outline">{t("buttonTexts.cancel")}</Button>
 									</DialogActionTrigger>
 									<DialogActionTrigger asChild>
 										<Button
@@ -427,7 +429,7 @@ const App = () => {
 												handleAddShoppingList(inputs, itemsFromInputs)
 											}
 										>
-											Add Shopping List
+											{t("buttonTexts.submit")}
 										</Button>
 									</DialogActionTrigger>
 								</DialogFooter>
