@@ -481,7 +481,7 @@ const App = () => {
 								<Flex gap={4} alignItems={"center"}>
 									<Text>{item.name}</Text>
 									<Box w="4px" h="4px" borderRadius="full" bg={{base :"gray.800", _dark:"gray.400"}} />
-									<Text fontSize={"10px"} fontWeight={600} color={{base :"gray.800", _dark:"gray.400"}}>{item.itemList.length} Items in list</Text>
+									<Text fontSize={"10px"} fontWeight={600} color={{base :"gray.800", _dark:"gray.400"}}>{item.itemList.length}  {t("titles.itemsInList")}</Text>
 								</Flex>
 								<Flex gap={4} alignItems={"center"}>
 									<Box
