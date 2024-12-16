@@ -228,7 +228,7 @@ const App = () => {
 					flexDirection={{base:"column", md:"row"}}
 					mb={{md:"none", base:"16px"}}
 				>
-					<Text fontSize={"18px"} fontWeight={500}>
+					<Text fontSize={"18px"} fontWeight={500} display={{md:"block", base:"none"}}>
 						{t("titles.mainPage")} :
 					</Text>
 					<Flex gap={2}>
@@ -457,6 +457,11 @@ const App = () => {
 							</DialogContent>
 						</DialogRoot>
 					</Flex>
+					<Flex justifyContent={"start"} w="full">
+						<Text fontSize={"18px"} fontWeight={500} display={{md:"none", base:"block"}} mt="16px">
+							{t("titles.mainPage")} :
+						</Text>
+					</Flex>
 				</Flex>
 				{shoppingList
 					?.filter(
@@ -480,12 +485,14 @@ const App = () => {
 							bgColor={{ base: "gray.100", _dark: "gray.800" }}
 						>
 							<Flex justifyContent={"space-between"} alignItems={"center"}>
-								<Flex gap={4} alignItems={"center"}>
+								<Flex gap={{md:"16px", base:"4px"}} alignItems={"center"} flexDirection={{md:"row", base:"column"}}>
 									<Text>{item.name}</Text>
-									<Box w="4px" h="4px" borderRadius="full" bg={{base :"gray.800", _dark:"gray.400"}} />
-									<Text fontSize={"10px"} fontWeight={600} color={{base :"gray.800", _dark:"gray.400"}}>{item.itemList.length}  {t("titles.itemsInList")}</Text>
+									<Flex gap={4} alignItems={"center"} justifyContent={"start"}>
+										<Box w="4px" h="4px" borderRadius="full" bg={{base :"gray.800", _dark:"gray.400"}} />
+										<Text fontSize={"10px"} fontWeight={600} color={{base :"gray.800", _dark:"gray.400"}}>{item.itemList.length}  {t("titles.itemsInList")}</Text>
+									</Flex>
 								</Flex>
-								<Flex gap={4} alignItems={"center"}>
+								<Flex gap={{md:"16px", base:"8px"}} alignItems={"center"}>
 									<Box
 										onClick={() => handleShowListDetail(item.id)}
 										variant="ghost"
