@@ -147,7 +147,9 @@ const ShoppingListDetail = () => {
 						: list
 				)
 			);
-			alert(`${t("titles.detailPage.youHaveLeft")}: ${openedItemListDetail.name}`);
+			alert(
+				`${t("titles.detailPage.youHaveLeft")}: ${openedItemListDetail.name}`
+			);
 			navigate("/");
 		}
 	};
@@ -393,7 +395,7 @@ const ShoppingListDetail = () => {
 								key={openedItemListDetail.id}
 								justifyContent={"center"}
 								flexDirection={"column"}
-								width={"60%"}
+								width={{sm:"60%", base:"80%"}}
 								mx={"auto"}
 								mb={"16px"}
 								gap="16px"
@@ -449,7 +451,12 @@ const ShoppingListDetail = () => {
 										</Button>
 									</Flex>
 								</Flex>
-								<Flex flexDirection={"column"} gap={4} mt={"16px"}>
+								<Flex
+									flexDirection={"column"}
+									gap={4}
+									mt={"16px"}
+									maxWidth={"800px"}
+								>
 									<Text
 										lineHeight={"24px"}
 										height={"24px"}
@@ -458,12 +465,7 @@ const ShoppingListDetail = () => {
 									>
 										{t("titles.detailPage.items")} :
 									</Text>
-									<Flex
-										px={"24px"}
-										justifyContent={"start"}
-										gap="48px"
-										w="100%"
-									>
+									<Flex justifyContent={"space-between"} width={"55%"} px={{sm:"24px", base:"8px"}}>
 										<Text fontWeight={500}>
 											{t("titles.detailPage.itemName")}
 										</Text>
