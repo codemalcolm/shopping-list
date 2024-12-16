@@ -13,7 +13,7 @@ const ShoppingListItem = (props) => {
 		<Box
 			w={"100%"}
 			bgColor={{base:"gray.200", _dark:"gray.600"}}
-			px={"24px"}
+			px={{sm:"24px", base:"8px"}}
 			py={"24px"}
 			borderRadius={"4px"}
 		>
