@@ -225,6 +225,8 @@ const App = () => {
 					justifyContent={"space-between"}
 					alignItems={"center"}
 					px={"16px"}
+					flexDirection={{base:"column", md:"row"}}
+					mb={{md:"none", base:"16px"}}
 				>
 					<Text fontSize={"18px"} fontWeight={500}>
 						{t("titles.mainPage")} :
